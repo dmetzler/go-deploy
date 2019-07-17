@@ -38,7 +38,7 @@ window._env_ = { {{ range . }}
 func GenerateDotEnv(srcEnv string, dstEnvJs string ) error {
 
 		if _, err := os.Stat(srcEnv); os.IsNotExist(err) {
-			return errors.New(".env file is not present")
+			return errors.New(".env file is not present (" + srcEnv + ")")
 		}
 
 		err, vars := getVars(srcEnv)

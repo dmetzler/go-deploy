@@ -18,5 +18,5 @@ package main
 import "github.com/dmetzler/go-deploy/cmd"
 
 func main() {
-  cmd.Execute()
+	cmd.Execute()
 }

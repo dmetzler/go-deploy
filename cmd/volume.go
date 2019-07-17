@@ -18,7 +18,6 @@ package cmd
 import (
 	"log"
 	"os"
-	"io/ioutil"
 	"github.com/spf13/cobra"
 	"github.com/otiai10/copy"
 	"github.com/dmetzler/go-deploy/lib"
@@ -40,33 +39,23 @@ var volumeCmd = &cobra.Command{
 			os.Exit(1)
     }
 
+    if _, err := os.Stat(srcDir); os.IsNotExist(err) {
+			log.Fatal("Source directory does not exist (SRC_DIR: " + srcDir + ")")
+			os.Exit(1)
+		}
+
     destination, _:= cmd.Flags().GetString("dest")
 		if _, err := os.Stat(destination); os.IsNotExist(err) {
 			log.Fatal("Destination directory does not exist")
 			os.Exit(1)
 		}
 
-		// Create temporary workdir
-		workdir, err := ioutil.TempDir("/tmp", "go-deploy")
-		if err != nil {
-		    log.Fatal(err)
-		    os.Exit(1)
-		}
-
-    // Copy the Source directory into our workdir
-    err = copy.Copy(srcDir, workdir)
-    if err != nil {
-		    log.Fatal(err)
-		    os.Exit(1)
-		}
-
-		// Generate env-config.js in workdir
-		configFile, _:= cmd.Flags().GetString("configname")
+		configName, _:= cmd.Flags().GetString("configname")
 		dotenv, _:= cmd.Flags().GetString("env")
-		err = lib.GenerateDotEnv(dotenv, workdir + "/" + configFile )
+
+		err, workdir := lib.BuildWorkDir(srcDir, dotenv, configName )
 		if err != nil {
-		    log.Fatal(err)
-		    os.Exit(1)
+			log.Fatal(err)
 		}
 
 		// Copy the result into destination
