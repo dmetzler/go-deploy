@@ -27,7 +27,8 @@ import (
 var volumeCmd = &cobra.Command{
 	Use:   "volume",
 	Short: "Deploys the application in a directory, usually a Docker volume.",
-	Long: `.`,
+	Long: `Deploys the content or $SRC_DIR to /html_dir that is usually mounted as a
+volume. The command support an addional argument to specify the target directory`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 
@@ -43,11 +44,10 @@ var volumeCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-    destination, _:= cmd.Flags().GetString("dest")
-		if _, err := os.Stat(destination); os.IsNotExist(err) {
-			log.Fatal("Destination directory does not exist")
-			os.Exit(1)
-		}
+		destination := "/html_dir"
+		if len(args) > 1 {
+	   	destination = args[0]
+	  }
 
 		configName, _:= cmd.Flags().GetString("configname")
 		dotenv, _:= cmd.Flags().GetString("env")
@@ -71,7 +71,6 @@ var volumeCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(volumeCmd)
-	volumeCmd.Flags().StringP("dest", "d", "/html_dir", "Destination directory")
 	volumeCmd.Flags().StringP("env", "e", ".env", "Source dotenv file")
 	volumeCmd.Flags().StringP("configname", "c", "env-config.js", "Name of the generated config file")
 }

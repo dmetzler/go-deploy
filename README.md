@@ -75,9 +75,8 @@ spec:
     image: dmetzler/static-html
     imagePullPolicy: Always
     command:
-    - "/entrypoint.sh"
-    - "vol"
-    - "/html_dir"
+    - "/go-deploy"
+    - "volume"
     env:
     - name: API_URL
       value: https://jsonplaceholder.typicode.com/users
