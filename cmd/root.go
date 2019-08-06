@@ -19,12 +19,13 @@ import (
   "fmt"
   "os"
   "github.com/spf13/cobra"
-
+  "github.com/sirupsen/logrus"
 )
 
 
 var cfgFile string
 
+var log = logrus.New()
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{

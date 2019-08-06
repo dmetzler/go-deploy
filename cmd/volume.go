@@ -16,7 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"log"
 	"os"
 	"github.com/spf13/cobra"
 	"github.com/otiai10/copy"
